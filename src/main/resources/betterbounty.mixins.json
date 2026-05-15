@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.ybm.betterbounty.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "betterbounty.refmap.json",
+  "mixins": [
+    "BoardScreenHandlerFix"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 0
+  },
+  "minVersion": "0.8"
+}

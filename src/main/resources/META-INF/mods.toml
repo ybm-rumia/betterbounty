@@ -1,0 +1,11 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All rights reserved"
+
+[[mods]]
+modId="betterbounty"
+version="1.0.4"
+displayName="更好的悬赏令"
+logoFile="logo.png"
+authors="ybm"
+description="修复了悬赏板异常吞物品，并与rs精致存储，精妙背包联动，使用悬赏令右键rs合成终端或原版容器即可提交，y3特供"

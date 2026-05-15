@@ -1,46 +1,125 @@
+BetterBounty —— 更好的悬赏令
+BetterBounty 是一个为 Bountiful 设计的辅助增强型模组，让你无需打开悬赏板，只需手持悬赏令右键 Refined Storage 终端 或 任何容器（箱子、木桶等），就能自动消耗存储/容器中的物品来完成悬赏令，并获得奖励和悬赏经验。
 
-Source installation information for modders
--------------------------------------------
-This code follows the Minecraft Forge installation methodology. It will apply
-some small patches to the vanilla MCP source code, giving you and it access 
-to some of the data and functions you need to build a successful mod.
+🌟 核心特性
+1. 一键便捷提交
+RS 终端直交：手持悬赏令右键精妙存储 (Refined Storage) 终端，直接从存储网络中扣除所需物品并完成悬赏令。
 
-Note also that the patches are built against "un-renamed" MCP source code (aka
-SRG Names) - this means that you will not be able to read them directly against
-normal code.
+容器通用兼容：同样支持原版箱子、木桶等任何带有物品存储能力的方块。
 
-Setup Process:
-==============================
+右键即用：不占用额外键位，不影响任何模组的原有交互逻辑。
 
-Step 1: Open your command-line and browse to the folder where you extracted the zip file.
+2. 三级智能消耗
+优先玩家背包：先从你的主物品栏中扣除所需物品。
 
-Step 2: You're left with a choice.
-If you prefer to use Eclipse:
-1. Run the following command: `./gradlew genEclipseRuns`
-2. Open Eclipse, Import > Existing Gradle Project > Select Folder 
-   or run `gradlew eclipse` to generate the project.
+再取精妙背包：自动识别主物品栏中所有提供 ITEM_HANDLER 能力的储存物品（包括各种精妙背包），提取内部存储的物品，兼容多个背包同时携带。
 
-If you prefer to use IntelliJ:
-1. Open IDEA, and import project.
-2. Select your build.gradle file and have it import.
-3. Run the following command: `./gradlew genIntellijRuns`
-4. Refresh the Gradle Project in IDEA if required.
+最后访问存储网络/容器：如果还不够，再从 Refined Storage 网络或右键点击的容器中补齐差额。
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can 
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-(this does not affect your code) and then start the process again.
+3. 丰富的目标类型支持
+精确物品：如 minecraft:diamond，完美识别指定的具体物品。
 
-Mapping Names:
-=============================
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license, if you do not agree with it you can change your mapping names to other crowdsourced names in your 
-build.gradle. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md
+物品标签：如 #minecraft:wool（任意颜色羊毛）、#minecraft:logs（任意原木），自动匹配各类变种。
 
-Additional Resources: 
-=========================
-Community Documentation: https://docs.minecraftforge.net/en/1.20.1/gettingstarted/
-LexManos' Install Video: https://youtu.be/8VEdtQLuLO0
-Forge Forums: https://forums.minecraftforge.net/
-Forge Discord: https://discord.minecraftforge.net/
+条件型目标：如"钓上附魔书"、"击杀某生物"，必须玩家先完成对应条件，才会进入物品消耗环节。
+
+4. 原子性消耗保障
+先模拟再扣取：所有消耗均为原子操作，先模拟检查总量，全部满足后才一次性真实扣除，杜绝部分扣取。
+
+数量不足提示：物品不足时，聊天栏会详细提示缺失什么、缺几个。
+
+JEI 自动书签：缺失物品会被自动标记到 JEI 书签栏，方便查找合成配方或来源（需安装 JEI）。
+
+5. 完整的奖励发放
+NBT 完整保留：奖励物品（如附魔书、特殊装备）中携带的全部 NBT 数据（附魔、属性等）将原封不动地发放给玩家，与在悬赏板提交完全一致。
+
+额外经验道具：提交后额外获得一个"悬赏令经验"，右键悬赏板即可增加该板的完成次数和等级。
+
+背包满不丢失：背包已满时，奖励物品会以掉落物形式出现在玩家脚边，随时可捡取。
+
+6. 悬赏令过期验证
+时间校验：提交时自动检查悬赏令的 bountiful:bounty_info 中 timeStarted 与 timeToComplete 字段，过期悬赏令无法提交并给出提示。
+
+🐛 Bug 修复
+本模组同时修复了 Bountiful 原版的一个长期存在的 Bug：
+
+修复悬赏板 UI 关闭时手上物品消失
+
+原版悬赏板（Bounty Board）打开后，如果玩家从物品栏拿起任意物品后直接关闭 UI（按 ESC/E），鼠标上的物品会永久消失。本模组通过 Mixin 修复了该问题，物品现在会安全归还到玩家背包（背包满时掉落），包括带 NBT 的物品（附魔书、命名牌等）和带 UUID 的储存物品（如精妙背包）都能完整返还。
+
+📦 依赖模组
+模组	必要性	说明
+Bountiful	必需	提供悬赏令核心内容与数据结构
+Refined Storage	必需	提供存储网络提取功能
+Just Enough Items (JEI)	可选	缺失物品自动加入书签，方便查找
+所有依赖均需对应 Minecraft 1.20.1 Forge 版本。
+
+📥 安装方法
+确认已经安装 Forge 并启动过游戏。
+
+下载并安装 Bountiful 和 Refined Storage（以及它们的必需前置）。
+
+将 betterbounty-1.0.3.jar 放入 .minecraft/mods 文件夹。
+
+（可选）安装 JEI 以获得缺失物品自动收藏功能。
+
+启动游戏，在"Mods"列表中确认 BetterBounty 处于 Active 状态。
+
+🕹️ 使用方法
+提交悬赏令
+从悬赏板（Bounty Board）上接取一个悬赏令。
+
+确保你的 玩家背包、精妙背包、RS 网络或附近的箱子 中存有悬赏令要求的所有物品。
+
+手持该悬赏令，对着 RS 终端 或 箱子 直接 右键（无需打开 GUI）。
+
+如果条件满足，物品会被扣除，你会收到奖励物品 + 一个 悬赏令经验。悬赏令消失。
+
+如果物品不足，聊天栏会提示缺失明细，缺失物品会被标记到 JEI 书签（需安装 JEI）。
+
+使用悬赏令经验
+获得 悬赏令经验 道具后，手持它右键任意悬赏板，即可提升该悬赏板的完成次数，效果等同于你正常在悬赏板提交了一个悬赏令。
+
+⚙️ 配置说明
+本模组无需任何额外配置，所有功能安装即用。模组直接读取 Bountiful 悬赏令标准 NBT 数据，无需手动调整参数。
+
+❓ 常见问题
+Q: 我能同时带多个精妙背包吗？
+A: 可以。模组会扫描主物品栏中所有提供 ITEM_HANDLER 能力的物品（包括各种精妙背包），并自动累加它们的内部存储量。
+
+Q: 奖励的附魔书会丢失附魔吗？
+A: 不会。模组会完整保留奖励物品的 NBT 数据，包括附魔、耐久、自定义属性等。
+
+Q: 背包满了奖励会消失吗？
+A: 不会。多余的奖励会以掉落物形式出现在脚边，与原版行为一致。
+
+Q: 服务器需要安装这个模组吗？
+A: 需要。服务端和客户端都需要安装。服务端处理核心消耗逻辑，客户端负责显示提示和 JEI 书签交互。
+
+Q: 这个模组会有性能压力吗？
+A: 完全没有。所有逻辑仅在玩家右键提交的瞬间运行一次，无任何后台 Tick 或轮询，不会对服务器 TPS 造成影响。
+
+Q: 在别人领地里能否使用我的 RS 终端？
+A: 如果领地保护插件（如 FTB Chunks）已正确配置，别人无法在你的领地内打开你的 RS 终端，因此也无法触发本模组的悬赏令提交功能。
+
+🏗️ 技术细节
+核心框架：Minecraft Forge 47.2.0+
+
+前置依赖：Bountiful (1.20.1) + Refined Storage (v1.12.4+)
+
+API 交互：通过 RS 公开的 INetwork、IStorageCache、StackListEntry 接口安全地操作存储网络。
+
+消耗保障：所有提取均为先模拟后执行的原子操作，杜绝部分扣除。
+
+NBT 解析：直接读取悬赏令中 bountiful:bounty_data 的 JSON 字符串，逆向还原 objectives 与 rewards，支持 item、item_tag、criteria 三种逻辑类型。
+
+安全可靠：所有网络通信均在服务端验证，客户端仅做结果显示与 JEI 书签更新。
+
+📝 开发信息
+作者：YBM
+
+版本：1.0.3
+
+许可：All Rights Reserved
+
+反馈与源码：可通过作者提供的仓库地址获取最新源码和问题反馈

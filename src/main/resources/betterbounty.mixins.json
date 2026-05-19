@@ -4,11 +4,12 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "betterbounty.refmap.json",
   "mixins": [
-    "BoardScreenHandlerFix"
+    "BoardScreenHandlerFix",
+    "BountyDataMixin"
   ],
   "client": [],
   "injectors": {
-    "defaultRequire": 0
+    "defaultRequire": 1
   },
   "minVersion": "0.8"
 }

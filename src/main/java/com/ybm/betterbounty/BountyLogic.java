@@ -187,7 +187,7 @@ public class BountyLogic {
         finishBounty(player, bounty);
     }
 
-    private static boolean checkAndConsumeAll(ServerPlayer player, @Nullable INetwork network,
+    public static boolean checkAndConsumeAll(ServerPlayer player, @Nullable INetwork network,
                                               @Nullable IItemHandler externalContainer,
                                               List<BountyRequirement> requirements) {
         // 1. criteria check
